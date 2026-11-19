@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131c">
+  <title>Gemini Web — دستیار هوشمند</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div><strong>Gemini Web</strong><small>AI Workspace</small></div>
+      </div>
+      <button class="new-chat" id="newChatBtn"><span>＋</span> گفت‌وگوی جدید</button>
+      <div class="side-label">فضای کاری</div>
+      <button class="side-item active" data-mode="general"><span>✧</span> گفت‌وگوی عمومی</button>
+      <button class="side-item" data-mode="coding"><span>⌘</span> دستیار برنامه‌نویسی</button>
+      <div class="side-label history-heading">گفت‌وگوهای اخیر</div>
+      <input id="searchChats" class="search-chats" type="search" placeholder="جست‌وجوی گفتگوها..." aria-label="جست‌وجوی گفتگوها">
+      <div id="historyList" class="history-list"></div>
+      <div class="sidebar-bottom">
+        <div class="connection"><span class="status-dot" id="statusDot"></span><span id="statusText">در حال بررسی اتصال...</span></div>
+        <div class="sidebar-note">کلید API فقط روی سرور نگهداری می‌شود.</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="menuBtn" aria-label="منو">☰</button>
+        <div class="top-title"><span class="mobile-brand">✦</span><span id="modeTitle">گفت‌وگوی عمومی</span><span class="model-pill" id="modelPill">Gemini</span></div>
+        <div class="top-actions">
+          <button class="icon-btn" id="themeBtn" title="تغییر تم" aria-label="تغییر تم">☼</button>
+          <button class="icon-btn" id="renameBtn" title="تغییر نام" aria-label="تغییر نام">✎</button>
+          <button class="icon-btn" id="exportBtn" title="خروجی گفتگو" aria-label="خروجی گفتگو">⇩</button>
+          <button class="icon-btn" id="settingsBtn" title="تنظیمات" aria-label="تنظیمات">⚙</button>
+          <button class="icon-btn" id="clearBtn" title="پاک کردن گفتگو" aria-label="پاک کردن گفتگو">⌫</button>
+        </div>
+      </header>
+
+      <section class="chat-area" id="chatArea">
+        <div class="welcome" id="welcome">
+          <div class="welcome-orb">✦</div>
+          <p class="eyebrow">YOUR AI WORKSPACE</p>
+          <h1>امروز چه کاری<br><span>انجام می‌دهیم؟</span></h1>
+          <p class="welcome-sub">سؤال بپرس، ایده‌پردازی کن یا کدت را برای بررسی بفرست.</p>
+          <div class="suggestions" id="suggestions">
+            <button class="suggestion" data-prompt="یک ایده جذاب برای ساخت پروژه با JavaScript پیشنهاد بده."><span>✧</span><b>ایده‌پردازی</b><small>برای پروژه بعدی‌ات ایده پیدا کن</small></button>
+            <button class="suggestion" data-prompt="تفاوت async و await در JavaScript را با مثال توضیح بده."><span>⌘</span><b>یادگیری برنامه‌نویسی</b><small>یک مفهوم را ساده یاد بگیر</small></button>
+            <button class="suggestion" data-prompt="برای ساخت یک API امن با Node.js چه نکاتی مهم هستند؟"><span>⚙</span><b>ساخت API</b><small>معماری و امنیت را بررسی کن</small></button>
+            <button class="suggestion" data-prompt="برای یک وب‌سایت مدرن، یک طرح و ساختار پیشنهادی بده."><span>◈</span><b>طراحی وب</b><small>از ایده تا رابط کاربری</small></button>
+          </div>
+        </div>
+        <div class="messages" id="messages" aria-live="polite"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <div class="composer">
+          <textarea id="messageInput" rows="1" maxlength="20000" placeholder="پیامت را برای Gemini بنویس..." aria-label="پیام"></textarea>
+          <div id="imagePreview" class="image-preview"></div>
+          <div class="composer-bottom">
+            <div class="composer-hints"><span class="mode-indicator" id="modeIndicator">✧ عمومی</span><span>Enter برای ارسال · Shift + Enter برای خط جدید</span></div>
+            <div class="composer-actions"><label class="attach-btn" title="افزودن تصویر یا فایل">＋<input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,application/pdf,text/plain,text/markdown,text/csv,application/json,.md,.txt,.csv,.json" multiple hidden></label><button id="webSearchBtn" class="web-search-btn" type="button" aria-pressed="false" title="جست‌وجوی وب با Google Search">⌕ وب</button><button id="stopBtn" class="stop-btn" hidden>توقف</button><button id="sendBtn" class="send-btn" aria-label="ارسال پیام"><span>↑</span></button></div>
+          </div>
+        </div>
+        <p class="disclaimer">Gemini ممکن است اشتباه کند؛ پاسخ‌های مهم را بررسی کن.</p>
+      </footer>
+    </main>
+  </div>
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" id="settingsForm"><header><h2>تنظیمات هوش مصنوعی</h2><button class="icon-btn" value="cancel" aria-label="بستن">×</button></header>
+      <label>مدل Gemini<input id="settingModel" maxlength="100" placeholder="gemini-2.5-flash"></label>
+      <label>Temperature <output id="temperatureValue">0.7</output><input id="settingTemperature" type="range" min="0" max="2" step="0.1" value="0.7"></label>
+      <label>حداکثر توکن خروجی<input id="settingTokens" type="number" min="1" max="32768" value="4096"></label>
+      <label>دستورالعمل سیستمی<textarea id="settingSystem" rows="4" maxlength="4000" placeholder="اختیاری..."></textarea></label>
+      <footer><button type="button" id="resetSettings">بازنشانی</button><button value="save" class="primary">ذخیره تنظیمات</button></footer>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
